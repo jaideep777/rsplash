@@ -1,11 +1,14 @@
 #include <cstdlib>
 #include <stdio.h>
 #include <vector>
+#include <cmath>
 
 #include "global.h"
 #include "SPLASH.h"
 
 using namespace std;
+
+#ifndef NATIVE_CPP
 
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -19,6 +22,8 @@ RCPP_MODULE(splash_module) {
     .method( "run_all", &SPLASH::run_all )
 	;
 }
+
+#endif
 
 /* \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
  * SPLASH.cpp
@@ -1587,6 +1592,8 @@ void SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
        
 }
 
+#ifndef NATIVE_CPP
+
 // How to return Lists to R
 // In .h and .cpp -- Make return type of the function as List (in each file, at the begining, put #include <Rcpp.h>)
 // at the end of the function, return List::create(values...)
@@ -1914,6 +1921,8 @@ return List::create(Named("wn") = wn_vec, Named("ro") = ro_vec, Named("pet") = p
                     Named("snow") = snow_vec, Named("cond") = cond_vec, Named("bflow") = bflow_vec,Named("netr") = netr_vec,
                     Named("qin_prev") = qin_vec, Named("tdrain") = td_vec, Named("snwage") = nds_vec);
 }
+
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

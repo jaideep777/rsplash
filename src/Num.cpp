@@ -19,8 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Rcpp.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <Rcpp.h>
-
 class Num {                     // simple class with two private variables
 public:                         // which have a getter/setter and getter
     Num() : x(0.0), y(0){} ;
@@ -34,6 +32,10 @@ private:
     double x ;
     int y ;
 };
+
+#ifndef NATIVE_CPP
+
+#include <Rcpp.h>
 
 RCPP_MODULE(NumEx){
     using namespace Rcpp ;
@@ -49,3 +51,5 @@ RCPP_MODULE(NumEx){
     .property( "y", &Num::getY )
     ;
 }
+
+#endif
