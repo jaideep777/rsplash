@@ -115,8 +115,10 @@ void EVAP::calculate_daily_fluxes(double sw, int n, int y, double sw_in,
     // specific heat J/kg/K
     //double Cp = specific_heat(tw);
     econ = s/(lv*pw*(s + g));
+    // ^ Jaideep: This seems like the penmann eqn econ for evaporation from wet surfaces. In the paper, it is defined with an extra factor of 0.24
     // max evaporation from Yang & Roderick (2019) doi:10.1002/qj.3481
     //econ = s/(lv*pw*(s + 0.24*g));
+    // ^ Jaideep: Indeed why isnt this revised econ used for condensation/sublimation/pet_max calculations?
     visc = calc_viscosity_h2o(tw,patm);
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // 3. Calculate daily condensation (wc), mm assume 10% of rnn_d (Jones, 2013)
@@ -126,7 +128,8 @@ void EVAP::calculate_daily_fluxes(double sw, int n, int y, double sw_in,
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // 4. Estimate daily equilibrium evapotranspiration (eet_d), mm
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    eet_d = (1.0e3)*(s/(lv*pw*(s + 0.24*g)))*rn_d;
+    eet_d = (1.0e3)*(s/(lv*pw*(s + 0.24*g)))*rn_d; 
+    // ^ Jaideep: Since here a factor of 0.24 is needed, the conversion factor is explicitly spelled out instead of using econ. This is the only instance where this is needed.
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // 5. Estimate daily potential evapotranspiration (pet_d), mm
@@ -158,8 +161,9 @@ void EVAP::calculate_daily_fluxes(double sw, int n, int y, double sw_in,
     //double B_r = (1/sw) + g/(sw*s) - 1.0;
 
     double EF = 1/(B_r + 1.0);
-    ///update sw
+    ///update sw // Jaideep: sw until now is just the stress factor. The update translates it to actual supply rate by multiplication with pet_max
     sw = pet_max*EF;
+    // ^ Jaideep: so the stress factor seems to be defined a bit differently in the paper (just sw), whereas here it is sw*s/(g+sw+s))
 
      if (sw < 0.0 || isnan(sw)==1) {
           sw = 0.0;
@@ -227,7 +231,8 @@ void EVAP::calculate_daily_fluxes(double sw, int n, int y, double sw_in,
     // available energy after heating the snow
     //double AE = max(0.0,rn_d-Qsnow);
     
-    
+
+    // Jaideep: Would these snowmelt and melt_enrg calcs work even when rn_d is reduced by fapar? probably yes, because only radiation reaching the surface will contribute to snowmelt and reduction of available energy for evaporation
     // calc snowmelt
        
     if (tc >= 3.0) {
