@@ -108,6 +108,7 @@ splash.point<-function(sw_in, tc, pn, lat,elev,slop=0,asp=0,soil_data,Au=0,resol
 		ncellin<-3
 		ncellout<-3
 		soil_info<-c(SAT,WP,FC,soil_info$Ksat,lambda,depth,bub_press,RES,Au[1],resolution^2,ncellin,ncellout)
+		# ^ Jaideep FIXME: Note that this does not set soil_info[13] to AI. This means that when this is dereferenced in quick-run, there's a risk of segfault or garbage value
 	}else{
 		ncellin<-Au[2]
 		ncellout<-Au[3]
@@ -146,8 +147,10 @@ splash.point<-function(sw_in, tc, pn, lat,elev,slop=0,asp=0,soil_data,Au=0,resol
 	##save initial year to calc AI
 	Pinit<-as.numeric(pn_av+snowf_av)
 	initial_AI<-my_splash$spin_up(as.integer(365), as.integer(y[1]), as.numeric(sw_av[1:365]), as.numeric(tc_av[1:365]),as.numeric(pn_av[1:365]),slop,asp,as.numeric(snowf_av[1:365]),soil_info)
+	# ^ Jaideep FIXME: This sees a size-12 soil_info when length(Au)=1, so might get segfault, or worse, AI will get garbage value 
 	#update aridity
 	soil_info[12]<-sum(initial_AI$pet,na.rm=T)/sum(Pinit[1:365],na.rm = T)
+	# ^ Jaideep FIXME: This is assigning AI to soil_info[12] (R indexing) which is ncellout. It should instead go into soil_info[13] (R indexing), i.e. soil_info[12] (C++ indexing)
 	# run spin up
 	initial<-my_splash$spin_up(as.integer(365), as.integer(y[1]), as.numeric(sw_av[1:365]), as.numeric(tc_av[1:365]),as.numeric(pn_av[1:365]),slop,asp,as.numeric(snowf_av[1:365]),soil_info)
 	###########################################################################

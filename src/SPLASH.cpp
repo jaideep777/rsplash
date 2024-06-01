@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 #include "global.h"
 #include "SPLASH.h"
@@ -200,6 +201,8 @@ void SPLASH::quick_run(int n, int y, double wn, double sw_in, double tc,
     double cellout = soil_info[11];
     double AI = soil_info[12];
     
+    std::cout << "AI = " << AI << " (soil info size = " << soil_info.size() << ")\n";
+
     // assuming gravity and water density constants, define coefficient to calc graviational potential
     double KG_o=1000.0/(997*Global::G);
     //if(isnan(soil_info[12])==1 ){
