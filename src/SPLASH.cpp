@@ -201,7 +201,7 @@ void SPLASH::quick_run(int n, int y, double wn, double sw_in, double tc,
     double cellout = soil_info[11];
     double AI = soil_info[12];
     
-    std::cout << "AI = " << AI << " (soil info size = " << soil_info.size() << ")\n";
+    // std::cout << "AI = " << AI << " (soil info size = " << soil_info.size() << ")\n";
 
     // assuming gravity and water density constants, define coefficient to calc graviational potential
     double KG_o=1000.0/(997*Global::G);
@@ -1595,13 +1595,7 @@ void SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
        
 }
 
-#ifndef NATIVE_CPP
-
-// How to return Lists to R
-// In .h and .cpp -- Make return type of the function as List (in each file, at the begining, put #include <Rcpp.h>)
-// at the end of the function, return List::create(values...)
-
-List SPLASH::spin_up(int n, int y, vector<double> &sw_in, vector <double> &tair, vector <double> &pn, 
+vector<vector<double>> SPLASH::spin_up_cpp(int n, int y, vector<double> &sw_in, vector <double> &tair, vector <double> &pn, 
                         double slop, double asp, vector <double> &snowfall,vector <double> &soil_info){
     /* ***********************************************************************
     Name:     SPLASH.spin_up
@@ -1754,8 +1748,23 @@ List SPLASH::spin_up(int n, int y, vector<double> &sw_in, vector <double> &tair,
 
     // Save initial soil moisture condition:
     //dsoil.sm = wn_vec[n-1];
+
+    return {wn_vec, snow_vec, qin_prev_vec, tdrain_vec, ro_vec, nds_prev_vec, pet_vec};
+
+}
+
+#ifndef NATIVE_CPP
+
+// How to return Lists to R
+// In .h and .cpp -- Make return type of the function as List (in each file, at the begining, put #include <Rcpp.h>)
+// at the end of the function, return List::create(values...)
+
+List SPLASH::spin_up(int n, int y, vector<double> &sw_in, vector <double> &tair, vector <double> &pn, 
+                     double slop, double asp, vector <double> &snowfall,vector <double> &soil_info){
     
-    return List::create(Named("sm") = wn_vec, Named("snow") = snow_vec,Named("qin") = qin_prev_vec,Named("tdrain") = tdrain_vec, Named("ro") = ro_vec, Named("snwage") = nds_prev_vec, Named("pet") = pet_vec);
+    vector<vector<double>> result = spin_up_cpp(n, y, sw_in, tair, pn, 
+                                                slop, asp, snowfall, soil_info);
+    return List::create(Named("sm") = result[0], Named("snow") = result[1], Named("qin") = result[2], Named("tdrain") = result[3], Named("ro") = result[4], Named("snwage") = result[5], Named("pet") = result[6]);
 }
 
 List SPLASH::run_one_year(int n, int y, vector<double> &sw_in, vector <double> &tair, vector <double> &pn, vector <double> &wn_vec, 
