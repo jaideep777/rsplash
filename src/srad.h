@@ -50,5 +50,6 @@ struct srad {
     double rn_d;    // daytime net radiation, J/m^2
     double rnn_d;   // nighttime net radiation, J/m^2
     double ts;     // surface temperature
+    double ppfd_d;   // photosynthetic photon flux density, mol/m^2/day
 };
 #endif

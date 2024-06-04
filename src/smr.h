@@ -57,5 +57,7 @@ struct smr {
     double tdr;     // day left to drain totally water from upslope
     double nd;     // snow age (days)
     double pet;     // potential evapotrasnpiration mm
+    double stress_factor; // soil moisture stress factor (wn-RES)/(Wmax-RES), unitless
+    double psi_m;    // soil matrix potential, MPa
 };
 #endif

@@ -89,8 +89,8 @@ class SPLASH {
         void quick_run(int n, int y, double wn, double sw_in, double tc,
                        double pn, smr &dsm, double slop, double asp, double snow, double snowfall, vector <double> &soil_info,
                        double qin, double td, double nd);
-        void run_one_day(int n, int y, double wn, double sw_in, double tc,
-                         double pn, smr &dsoil, double slop, double asp,double snow, double snowfall, vector <double> &soil_info,double qin, double td, double nd);
+        etr run_one_day(int n, int y, double wn, double sw_in, double tc,
+                         double pn, smr &dsoil, double slop, double asp,double snow, double snowfall, vector <double> &soil_info,double qin, double td, double nd, double plant_uptake = 0);
 
         vector<vector<double>> spin_up_cpp(int n, int y, vector<double> &sw_in, vector <double> &tair, vector <double> &pn, double slop, double asp, vector <double> &snowfall, vector <double> &soil_info);        
 

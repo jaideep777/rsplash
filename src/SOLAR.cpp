@@ -1,6 +1,7 @@
 #include <cmath>
 #include <stdio.h>
 #include <vector>
+#include <iostream>
 
 #include "global.h"
 #include "SOLAR.h"
@@ -84,6 +85,8 @@ void SOLAR::calculate_daily_fluxes(int n, int y, double sw_in, double tc, double
     Output:
     Features: Calculates the daily solar radiation fluxes
     *********************************************************************** */
+    cout << "SOLAR calc inputs: " << n << " " << y << " " << sw_in << " " << tc << " " << slop << " " << asp << " " << snow << " " << nd << " " << sw << '\n';
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // 0. Save day of year
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -263,6 +266,7 @@ void SOLAR::calculate_daily_fluxes(int n, int y, double sw_in, double tc, double
     //max air temeperature
     //ts = tc/dcos(hs/2);
 
+    cout << "End of SOLAR calc: rnl = " << rnl << endl;
 
 }
 
@@ -388,6 +392,7 @@ srad SOLAR::get_vals(){
     dsr.rn_d = rn_d;    // daytime net radiation, J/m^2
     dsr.rnn_d = rnn_d;  // nighttime net radiation, J/m^2
     dsr.ts = ts;        // surface temperature, C
+    dsr.ppfd_d = ppfd_d;  // daily mean ppfd
 
     return dsr;
 }

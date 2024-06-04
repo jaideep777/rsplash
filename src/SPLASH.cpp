@@ -925,9 +925,9 @@ void SPLASH::quick_run(int n, int y, double wn, double sw_in, double tc,
    
 }
 
-void SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
+etr SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
                          double pn,smr &dsoil, double slop, double asp,double snow, double snowfall, vector <double> &soil_info,
-                         double qin, double td, double nd) {
+                         double qin, double td, double nd, double plant_uptake) {
     /* ***********************************************************************
     Name:     SPLASH.run_one_day
     Input:    - int, day of year (n)
@@ -1277,7 +1277,7 @@ void SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
     // 5.1.5. calculate Hortonian (infiltration excess) runoff
     double ro_h = max(inflow-infi,0.0);
     // 5.1.6. calculate recharge
-    double R = infi - dvap.aet;
+    double R = infi - dvap.aet - plant_uptake;
     // 5.1.7. define the hydraulic gradient assuming steady state: z: I=Ks(dh/dz +1), x: tan(slop), if theta<fc no vertical flow outside the column
     
     double Kunsat = Ksat_visc * pow((theta_m/theta_s),(3.0+(2.0/lambda)));
@@ -1589,10 +1589,21 @@ void SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
     dsoil.sqout = qin_nday; 
     dsoil.bflow = T;
     dsoil.nd = nd;
-    
-   
 
-       
+    dsoil.stress_factor = (sm-RES)/(Wmax-RES);   
+    cout << "sw_end(calc at start) / stress_end (calc at end) = " << sw << " / " << dsoil.stress_factor << '\n';
+
+    theta_i = (sm)/(depth*1000.0);
+    // correct theta_i for NA error reaching boundary conditions
+    if (theta_i>=theta_s){
+        theta_i = theta_s - 0.001;
+    } else if (theta_i<=theta_r){
+        theta_i = theta_r + 0.001;
+    }
+    dsoil.psi_m = bub_press/pow((((theta_i-theta_r)/(theta_s-theta_r))),(1/lambda));
+    dsoil.psi_m *= 0.00000980665; // convert from mmH2o --> MPa
+
+    return dvap;
 }
 
 vector<vector<double>> SPLASH::spin_up_cpp(int n, int y, vector<double> &sw_in, vector <double> &tair, vector <double> &pn, 
