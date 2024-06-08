@@ -85,7 +85,7 @@ void SOLAR::calculate_daily_fluxes(int n, int y, double sw_in, double tc, double
     Output:
     Features: Calculates the daily solar radiation fluxes
     *********************************************************************** */
-    cout << "SOLAR calc inputs: " << n << " " << y << " " << sw_in << " " << tc << " " << slop << " " << asp << " " << snow << " " << nd << " " << sw << '\n';
+    // cout << "SOLAR calc inputs: " << n << " " << y << " " << sw_in << " " << tc << " " << slop << " " << asp << " " << snow << " " << nd << " " << sw << '\n';
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // 0. Save day of year
@@ -266,7 +266,7 @@ void SOLAR::calculate_daily_fluxes(int n, int y, double sw_in, double tc, double
     //max air temeperature
     //ts = tc/dcos(hs/2);
 
-    cout << "End of SOLAR calc: rnl = " << rnl << endl;
+    // cout << "End of SOLAR calc: rnl = " << rnl << endl;
 
 }
 

@@ -1591,7 +1591,7 @@ etr SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
     dsoil.nd = nd;
 
     dsoil.stress_factor = (sm-RES)/(Wmax-RES);   
-    cout << "sw_end(calc at start) / stress_end (calc at end) = " << sw << " / " << dsoil.stress_factor << '\n';
+    // cout << "sw_end(calc at start) / stress_end (calc at end) = " << sw << " / " << dsoil.stress_factor << '\n';
 
     theta_i = (sm)/(depth*1000.0);
     // correct theta_i for NA error reaching boundary conditions

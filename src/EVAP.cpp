@@ -95,7 +95,7 @@ void EVAP::calculate_daily_fluxes(double sw, int n, int y, double sw_in,
     rnn_d = d_sr.rnn_d;
     double ts = d_sr.ts;
     
-    printf("Rnl in EVAP function: %0.6f W/m^2\n", rnl);
+    // printf("Rnl in EVAP function: %0.6f W/m^2\n", rnl);
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // 1.1. Assume water temperature 0.0 if air temperature < 0.0
