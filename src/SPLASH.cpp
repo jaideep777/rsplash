@@ -1273,7 +1273,7 @@ etr SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
     double surf_moist = moist_surf(depth,10.0,bub_press,wn,SAT,RES,lambda);
     // 5.1.4. calculate infiltration assuming storm duration max 3hrs
     double theta_m = max(Wmax/(depth *1000.0),theta_i);
-    double infi = inf_GA(bub_press,surf_moist,Ksat_visc,theta_s,lambda,inflow,6.0,slop);
+    double infi = inf_GA(bub_press,surf_moist,Ksat_visc,theta_s,lambda,inflow,6.0,slop); // May change 6.0 to lower number to avoid nans in t_drain
     // 5.1.5. calculate Hortonian (infiltration excess) runoff
     double ro_h = max(inflow-infi,0.0);
     // 5.1.6. calculate recharge
@@ -1478,11 +1478,13 @@ etr SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
     if((R > 0.0) && (sm > Wmax)){
         // calc theoretical time to drain out the area upslope at the current transmittance
         t_drain = -1.0*log(1.0-(log(Kb)*(Au*R/Q)))/log(Kb);
+        // cout << "R/Q/t_drain = " << R << "/" << Q << "/" << t_drain << '\n'; 
         // using the usual decaying drainage eqn Q_t=Q_o Kb^t, how muchs is the initial input?
         //q_in_f = Qt/(Ai*pow(Kb,t_drain));
         q_in_f = (Qt-Au*R*log(Kb))/Ai;
        
     }    
+    if (isnan(t_drain)) t_drain = 0; // FIXME: temporary fix, to be tested thoroughly
     // failsafe for big storms
     if (q_in_f  < 0.0 || isnan(q_in_f)==1){
         q_in_f  = 0.0;
@@ -1594,6 +1596,8 @@ etr SPLASH::run_one_day(int n, int y, double wn, double sw_in, double tc,
     // cout << "sw_end(calc at start) / stress_end (calc at end) = " << sw << " / " << dsoil.stress_factor << '\n';
 
     theta_i = (sm)/(depth*1000.0);
+    dsoil.sm_vv = theta_i;
+    
     // correct theta_i for NA error reaching boundary conditions
     if (theta_i>=theta_s){
         theta_i = theta_s - 0.001;

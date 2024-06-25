@@ -15,7 +15,7 @@ INC_PATH :=  -I./src/ #-I./CppNumericalSolvers-1.0.0
 LIB_PATH :=  
 
 # flags
-CPPFLAGS = -O3 -g -pg -std=c++17 -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable -DNATIVE_CPP
+CPPFLAGS = -O3 -g -pg -fPIC -std=c++17 -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable -DNATIVE_CPP
 LDFLAGS =  -g -pg
 
 # libs

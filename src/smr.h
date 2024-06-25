@@ -59,5 +59,6 @@ struct smr {
     double pet;     // potential evapotrasnpiration mm
     double stress_factor; // soil moisture stress factor (wn-RES)/(Wmax-RES), unitless
     double psi_m;    // soil matrix potential, MPa
+    double sm_vv;   // volumetric soil moisture content, m3 m-3
 };
 #endif
